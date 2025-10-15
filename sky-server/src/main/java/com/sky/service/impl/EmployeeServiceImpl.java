@@ -1,17 +1,28 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -53,6 +64,52 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    /*
+     *
+     * 新增员工
+     * */
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+        Employee employee=new Employee();
+        //将employpeDTO封装的数据复制到employee中
+        BeanUtils.copyProperties(employeeDTO,employee);
+
+        //添加账号状态
+        employee.setStatus(StatusConstant.ENABLE);
+
+        //设置密码
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
+        //设置创建时间和修改时间
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        //设置创建人id和修改人id
+        employee.setCreateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.insert(employee);
+
+    }
+
+    /*
+     *
+     *分页查询
+     * */
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+
+        //调用Pagehelper插件
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        List<Employee> p= employeeMapper.pageQuery(employeePageQueryDTO);
+
+        PageInfo<Employee> pageInfo = new PageInfo<>(p);
+        long total = pageInfo.getTotal();
+        List<Employee> list = pageInfo.getList();
+
+        return new PageResult(total,list);
     }
 
 }
