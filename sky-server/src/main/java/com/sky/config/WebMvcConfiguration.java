@@ -38,5 +38,5 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    // ✅ 删除了 docket() 方法，由 springdoc 自动处理
+
 }
