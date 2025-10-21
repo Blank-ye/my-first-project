@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -77,6 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
     * 根据id删除分类
     *
     * */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteById(Long id) {
         //判断该分类下是否关联菜品，如果关联，就抛出异常
