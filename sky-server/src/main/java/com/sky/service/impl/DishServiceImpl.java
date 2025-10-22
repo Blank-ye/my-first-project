@@ -39,6 +39,8 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private DishService dishService;
 
     /*
      * 新增菜品和菜品口味
@@ -157,6 +159,7 @@ public class DishServiceImpl implements DishService {
      * 起售，停售菜品
      *
      * */
+    @Transactional
     @Override
     public void updateStatus(Integer status, Long id) {
         //修改菜品状态
@@ -176,5 +179,15 @@ public class DishServiceImpl implements DishService {
                 setmealDishMapper.updateStatus(DishIds,status);
             }
         }
+    }
+
+    /*
+     * 根据分类id查询菜品
+     *
+     * */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        List<Dish> dishes= dishMapper.list(categoryId);
+        return dishes;
     }
 }

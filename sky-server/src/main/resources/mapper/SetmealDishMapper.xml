@@ -20,4 +20,12 @@
                 #{dishId}
             </foreach>
     </update>
+
+    <insert id="setmealAddDish">
+        insert into setmeal_dish (copies,price,name,dish_id,setmeal_id)
+        values
+        <foreach collection="setmealDishes" item="setmealdish" separator=",">
+            (#{setmealdish.copies},#{setmealdish.price},#{setmealdish.name},#{setmealdish.dishId},#{setmealdish.setmealId})
+        </foreach>
+    </insert>
 </mapper>

@@ -13,7 +13,7 @@
         SELECT d.*,c.name categoryName FROM dish d LEFT JOIN category c ON d.category_id =c.id
         <where>
             <if test="name != null and name !=''">
-                and name d.like concat('%',#{name},'%')
+                and d.name like concat('%',#{name},'%')
             </if>
             <if test="categoryId !=null">
                 and d.category_id =#{categoryId}
@@ -46,5 +46,15 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="list" resultType="com.sky.entity.Dish">
+        SELECT *  FROM dish
+        <where>
+            <if test="categoryId !=null">
+                and category_id =#{categoryId}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
 
 </mapper>
