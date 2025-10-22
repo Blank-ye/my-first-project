@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -130,6 +131,7 @@ public class DishServiceImpl implements DishService {
      * 修改菜品信息和口味
      *
      * */
+    @Transactional
     @Override
     public void updateWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();
@@ -157,10 +159,22 @@ public class DishServiceImpl implements DishService {
      * */
     @Override
     public void updateStatus(Integer status, Long id) {
+        //修改菜品状态
         Dish dish = Dish.builder()
                 .status(status)
                 .id(id)
                 .build();
         dishMapper.update(dish);
+
+        //如果菜品停售它所关联的套餐也要停售
+        if (status==StatusConstant.DISABLE){
+            List<Long> ids = new ArrayList<>();
+            ids.add(id);
+            List<Long> DishIds = setmealDishMapper.selectSetmealIdByDishId(ids);
+            //如果一个菜品关联多个套餐批量修改套餐的状态
+            if (DishIds !=null && DishIds.size()>0){
+                setmealDishMapper.updateStatus(DishIds,status);
+            }
+        }
     }
 }
