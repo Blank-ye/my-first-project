@@ -31,4 +31,31 @@ public interface SetmealMapper {
     *
     * */
     List<SetmealVO> page(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /*
+     * 根据id批量删除套餐
+     *
+     * */
+    void deleteById(List<Long> ids);
+
+
+    /*
+    * 根据id查询套餐
+    *
+    * */
+    List<Setmeal> selectById(List<Long> ids);
+
+    /*
+    * 修改套餐信息
+    *
+    * */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Setmeal setmeal);
+
+    /*
+     * 根据id查询套餐信息
+     *
+     * */
+    @Select("select * from setmeal where id=#{id}")
+    Setmeal getById(Long id);
 }

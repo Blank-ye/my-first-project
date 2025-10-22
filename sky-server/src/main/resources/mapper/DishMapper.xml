@@ -22,7 +22,7 @@
                 and d.status =#{status}
             </if>
         </where>
-        order by update_time desc
+        order by  d.update_time desc
     </select>
 
     <delete id="deleteById">

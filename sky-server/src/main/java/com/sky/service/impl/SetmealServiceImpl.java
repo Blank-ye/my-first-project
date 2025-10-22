@@ -2,11 +2,14 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
@@ -29,6 +32,9 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private DishMapper dishMapper;
+
     /*
      * 新增套餐
      *
@@ -66,5 +72,66 @@ public class SetmealServiceImpl implements SetmealService {
         PageInfo<Object> pageInfo = new PageInfo<>(list);
 
         return new PageResult(pageInfo.getTotal(),pageInfo.getList());
+    }
+
+    /*
+     * 根据id批量删除套餐
+     *
+     * */
+    @Transactional
+    @Override
+    public void deleteByIds(List<Long> ids) {
+
+        List<Setmeal> setmeal= setmealMapper.selectById(ids);
+        for (Setmeal setmeal1 : setmeal) {
+            if (setmeal1.getStatus()== StatusConstant.ENABLE){
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        }
+        setmealMapper.deleteById(ids);
+        setmealDishMapper.deleteBySetmealId(ids);
+    }
+
+    /*
+     * 修改套餐信息
+     *
+     * */
+    @Transactional
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+
+        setmealMapper.update(setmeal);
+
+        Long setmealId = setmeal.getId();
+
+        //删除套餐关联的菜品
+        setmealDishMapper.deleteBySetMealId(setmealId);
+
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
+            setmealDish.setSetmealId(setmealId);
+        });
+
+        setmealDishMapper.inseretBarce(setmealDishes);
+
+    }
+
+    /*
+     * 根据id查询套餐信息
+     *
+     * */
+    @Override
+    public SetmealVO getById(Long id) {
+        Setmeal setmeal= setmealMapper.getById(id);
+
+        List<SetmealDish> setmealDishes= setmealDishMapper.getWithSetmealById(id);
+
+        SetmealVO setmealVO = new SetmealVO();
+
+        BeanUtils.copyProperties(setmeal,setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
     }
 }
