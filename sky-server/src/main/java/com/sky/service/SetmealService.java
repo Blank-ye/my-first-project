@@ -38,4 +38,10 @@ public interface SetmealService {
     *
     * */
     SetmealVO getById(Long id);
+
+    /*
+    * 起售禁售套餐
+    *
+    * */
+    void sartStop(Integer status, Long id);
 }

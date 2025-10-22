@@ -80,4 +80,16 @@ public class SetmealController {
         SetmealVO setmealVO= setmealService.getById(id);
         return Result.success(setmealVO);
     }
+
+    /*
+    * 起售禁售套餐
+    *
+    *
+    * */
+    @PostMapping("/status/{status}")
+    public Result startStop(@PathVariable Integer status ,Long id ){
+        log.info("起售禁售套餐，{},{}",status,id);
+        setmealService.sartStop(status,id);
+        return Result.success();
+    }
 }

@@ -12,6 +12,7 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -39,8 +40,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+
     @Autowired
-    private DishService dishService;
+    private SetmealMapper setmealMapper;
 
     /*
      * 新增菜品和菜品口味
@@ -173,10 +175,10 @@ public class DishServiceImpl implements DishService {
         if (status==StatusConstant.DISABLE){
             List<Long> ids = new ArrayList<>();
             ids.add(id);
-            List<Long> DishIds = setmealDishMapper.selectSetmealIdByDishId(ids);
+            List<Long> setmealId = setmealDishMapper.selectSetmealIdByDishId(ids);
             //如果一个菜品关联多个套餐批量修改套餐的状态
-            if (DishIds !=null && DishIds.size()>0){
-                setmealDishMapper.updateStatus(DishIds,status);
+            if (setmealId !=null && setmealId.size()>0){
+                setmealMapper.updateStatus(setmealId,status);
             }
         }
     }

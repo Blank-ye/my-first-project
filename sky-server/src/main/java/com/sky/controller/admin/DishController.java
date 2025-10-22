@@ -83,7 +83,7 @@ public class DishController {
     *
     * */
     @PostMapping("/status/{status}")
-    public Result updateStatus(@PathVariable Integer status,Long id){
+    public Result<String> updateStatus(@PathVariable Integer status,Long id){
         log.info("起售，停售菜品，{}，{}",status,id);
         dishService.updateStatus(status,id);
         return Result.success();

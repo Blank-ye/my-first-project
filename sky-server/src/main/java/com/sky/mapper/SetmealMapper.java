@@ -58,4 +58,7 @@ public interface SetmealMapper {
      * */
     @Select("select * from setmeal where id=#{id}")
     Setmeal getById(Long id);
+
+
+    void updateStatus(List<Long> setmealIds, Integer status);
 }

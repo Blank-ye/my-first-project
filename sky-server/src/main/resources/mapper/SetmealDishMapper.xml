@@ -10,16 +10,7 @@
         </foreach>
     </select>
 
-    <update id="updateStatus">
-        update setmeal_dish
-        <set>
-        <if test="status !=null">status=#{status}</if>
-        </set>
-        where dish_id in
-            <foreach collection="DishIds" item="dishId" separator="," open="(" close=")">
-                #{dishId}
-            </foreach>
-    </update>
+
 
     <insert id="setmealAddDish">
         insert into setmeal_dish (copies,price,name,dish_id,setmeal_id)
