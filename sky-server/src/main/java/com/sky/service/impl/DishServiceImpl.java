@@ -197,8 +197,8 @@ public class DishServiceImpl implements DishService {
      * 条件查询菜品和口味
      * @return
      */
-    public List<DishVO> listWithFlavor(Long categoryId) {
-        List<Dish> dishList = dishMapper.list(categoryId);
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.listWithFlavor(dish.getCategoryId(),dish.getStatus());
 
         List<DishVO> dishVOList = new ArrayList<>();
 

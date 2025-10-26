@@ -8,6 +8,7 @@ import com.sky.vo.DishVO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 根据分类id查询菜品
      *
@@ -30,8 +34,22 @@ public class DishController {
     @GetMapping("/list")
     public Result<List<DishVO>> list(Long categoryId) {
 
+        //组建redis的key
+        String key="dish_"+categoryId;
 
-        List<DishVO> list = dishService.listWithFlavor(categoryId);
+        //判断redis中是否存在key
+        List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if (list !=null && list.size()>0){
+            //存在key就直接返回
+            return Result.success(list);
+        }
+        //不存在key就查询数据库并存入redis中
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE);
+
+        list = dishService.listWithFlavor(dish);
+        redisTemplate.opsForValue().set(key,list);
 
         return Result.success(list);
     }

@@ -43,4 +43,11 @@ public interface DishMapper {
     List<Dish> list(Long categoryId);
 
 
+
+    /**
+     * 条件查询菜品和口味
+     * @return
+     */
+    @Select("select * from dish where category_id=#{categoryId} and status=#{status}")
+    List<Dish> listWithFlavor(Long categoryId, Integer status);
 }
