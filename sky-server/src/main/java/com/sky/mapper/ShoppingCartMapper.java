@@ -47,4 +47,10 @@ public interface ShoppingCartMapper {
     *
     * */
     void subDish(ShoppingCart shoppingCart);
+
+    /*
+    * 批量插入购物车
+    *
+    * */
+    void insertBatch(List<ShoppingCart> shoppingCartList);
 }

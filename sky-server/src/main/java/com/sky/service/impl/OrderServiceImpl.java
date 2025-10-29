@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -162,12 +163,15 @@ public class OrderServiceImpl implements OrderService {
     public PageResult history(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
         List<Orders> list= orderMapper.page(ordersPageQueryDTO);
+
         PageInfo<Object> pageInfo = new PageInfo<>(list);
         List<OrderVO> orderVos =new ArrayList<>();
+
         if (list !=null && list.size()>0){
             for (Orders orders : list) {
                 Long id = orders.getId();
                 List<OrderDetail> orderDetails= orderDetailMapper.getByOrderId(id);
+
                 OrderVO orderVO = new OrderVO();
                 orderVO.setOrderDetailList(orderDetails);
                 BeanUtils.copyProperties(orders,orderVO);
@@ -175,5 +179,85 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return new PageResult(pageInfo.getTotal(),orderVos);
+    }
+
+    /*
+    * 查看订单详细
+    *
+    * */
+    @Override
+    public OrderVO getById(Long id) {
+        //根据订单id查询订单是否存在
+        Orders orders= orderMapper.getById(id);
+        //判断订单如果存在,不村在就抛异常
+        if(orders == null){
+          throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        //根据订单id查询订单详细
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(id);
+
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderDetailList(orderDetails);
+        BeanUtils.copyProperties(orders,orderVO);
+
+        return orderVO;
+    }
+
+    /*
+    * 再来一单
+    *
+    * */
+    @Override
+    public void repetition(Long id) {
+        //根据订单id查询订单详细
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(id);
+        Long userId = BaseContext.getCurrentId();
+
+        //将订单详细插入购物车中
+        List<ShoppingCart> shoppingCartList=orderDetails.stream().map(x->{
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(x,shoppingCart,"id");
+            shoppingCart.setUserId(userId);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            return shoppingCart;
+        }).collect(Collectors.toList());
+        shoppingCartMapper.insertBatch(shoppingCartList);
+
+    }
+
+    /*
+    * 取消订单
+    *
+    * */
+    @Override
+    public void cancelByid(Long id) {
+        //根据订单id查询订单
+        Orders orderDB = orderMapper.getById(id);
+        //判断订单是否存在
+        if(orderDB ==null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if (orderDB.getStatus()>2){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        //调用微信工具类进行退款
+        // 订单处于待接单状态下取消，需要进行退款
+//        if (ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+//            //调用微信支付退款接口
+//            weChatPayUtil.refund(
+//                    ordersDB.getNumber(), //商户订单号
+//                    ordersDB.getNumber(), //商户退款单号
+//                    new BigDecimal(0.01),//退款金额，单位 元
+//                    new BigDecimal(0.01));//原订单金额
+//
+//            //支付状态修改为 退款
+//            orders.setPayStatus(Orders.REFUND);
+//        }
+        Orders orders = new Orders();
+        orders.setId(orderDB.getId());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason("用户取消");
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
     }
 }
