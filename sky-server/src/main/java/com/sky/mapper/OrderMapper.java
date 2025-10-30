@@ -5,6 +5,7 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -40,4 +41,18 @@ public interface OrderMapper {
     * */
     @Select("select * from orders where id=#{id}")
     Orders getById(Long id);
+
+    /*
+    * 查询待接单的数量
+    *
+    * */
+    @Select("select count(*) from orders where status=#{status}")
+    Integer status(Integer status);
+
+    /*
+    * 处理定时任务
+    *
+    * */
+    @Select("select * from orders where status=#{paid} and order_time<#{time}")
+    List<Orders> getByStatusAndTime(Integer paid, LocalDateTime time);
 }

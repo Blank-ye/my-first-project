@@ -91,4 +91,15 @@ public class OrderController {
         orderService.cancelByid(id);
         return Result.success();
     }
+
+    /*
+    * 催单
+    *
+    * */
+    @GetMapping("/reminder/{id}")
+    public Result reminder(@PathVariable Long id){
+        log.info("催促的订单id，{}",id);
+        orderService.reminder(id);
+        return Result.success();
+    }
 }
