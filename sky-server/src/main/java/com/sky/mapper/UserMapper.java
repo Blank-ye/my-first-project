@@ -22,7 +22,6 @@ public interface UserMapper {
     * 插入用户
     *
     * */
-
     void insertUser(User user);
 
     @Select("select * from user where id=#{userId}")

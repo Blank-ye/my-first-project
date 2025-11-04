@@ -6,6 +6,7 @@ import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,14 @@ public class ReportController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
         log.info("统计菜品top10，{}，{}",begin,end);
         return Result.success(reportService.getSalesTop10(begin,end));
+    }
+
+    /*
+    * 导出excel表个
+    *
+    * */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response){
+        reportService.getExcel(response);
     }
 }
