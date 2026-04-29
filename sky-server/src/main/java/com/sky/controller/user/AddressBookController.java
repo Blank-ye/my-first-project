@@ -8,7 +8,9 @@ import com.sky.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+/*
+* 用户的地址簿管理
+* */
 @RestController
 @RequestMapping("/user/addressBook")
 

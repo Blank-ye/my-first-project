@@ -15,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.util.UUID;
-
+/*
+* 上传图片
+* */
 @RestController
 @Slf4j
 @RequestMapping("/admin/common")

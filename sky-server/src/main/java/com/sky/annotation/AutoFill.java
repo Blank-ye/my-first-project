@@ -8,8 +8,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)//明确用与方法
+@Retention(RetentionPolicy.RUNTIME)//运行时给 AOP 看
 public @interface AutoFill {
     OperationType value();
 }

@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/*
+* 用户购物端
+*
+* */
 @RestController
 @Slf4j
 @RequestMapping("/user/shoppingCart")

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-
+/*
+* 店铺的数据统计
+* */
 @RestController
 @RequestMapping("/admin/report")
 @Slf4j

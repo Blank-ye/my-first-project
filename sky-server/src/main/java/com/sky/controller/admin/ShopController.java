@@ -8,7 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
+/*
+* 店铺
+* */
 @RestController("adminShopController")
 @RequestMapping("/admin/shop")
 @Slf4j

@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-
+/*
+* 用户查询菜品
+*
+* */
 @RestController("userDishController")
 @RequestMapping("/user/dish")
 @Slf4j

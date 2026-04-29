@@ -16,7 +16,7 @@ spring:
     redis:
       host: ${sky.redis.host}
       port: ${sky.redis.port}
-      password: ${sky.redis.password}
+      #password: ${sky.redis.password}
       database: ${sky.redis.database}
 
 
@@ -38,13 +38,13 @@ logging:
 
 sky:
   jwt:
-    # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: itcast
+    # 设置jwt签名加密时使用的秘钥（必须 >= 32 字符以满足 HMAC-SHA256 安全要求）
+    admin-secret-key: sky-take-out-admin-secret-key-2024-min-32-chars!!
     # 设置jwt过期时间
     admin-ttl: 7200000000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
-    user-secret-key: javaking
+    user-secret-key: sky-take-out-user-secret-key-2024-safe-and-secure!!!
     user-ttl: 7200000
     user-token-name: authentication
   alioss:
