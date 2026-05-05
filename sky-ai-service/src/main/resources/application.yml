@@ -10,6 +10,8 @@ langchain4j:
       temperature: 0.7
       max-tokens: 4000
       timeout: 60s
+      log-requests: true
+      log-responses: true
     streaming-chat-model:
       base-url: https://open.bigmodel.cn/api/paas/v4/
       api-key: 1fae2d840b624d68b82a4890ab79ff25.wrqDRqXB3XrkzOL7

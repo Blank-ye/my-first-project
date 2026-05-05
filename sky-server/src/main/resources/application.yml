@@ -55,3 +55,26 @@ sky:
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
+
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: https://open.bigmodel.cn/api/paas/v4/
+      api-key: ${sky.open-ai.api-key}
+      model-name: glm-4.5-air
+      temperature: 0.7
+      max-tokens: 4000
+      timeout: 60s
+      log-requests: true
+      log-responses: true
+    streaming-chat-model:
+      base-url: https://open.bigmodel.cn/api/paas/v4/
+      api-key: ${sky.open-ai.api-key}
+      model-name: glm-4.5-air
+      temperature: 0.7
+      max-tokens: 4000
+      timeout: 60s
+    embedding-model:
+      base-url: https://open.bigmodel.cn/api/paas/v4/
+      api-key: ${sky.open-ai.api-key}
+      model-name: embedding-3

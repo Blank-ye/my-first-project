@@ -6,6 +6,7 @@ import com.sky.entity.Orders;
 import com.sky.vo.SalesTop10ReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,4 +77,13 @@ public interface OrderMapper {
     *
     * */
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    // 清空表
+    void truncate();
+
+    // 统计近7天销量前5并写入
+    void insertWeeklyTop5();
+
+    @Select("select food_name from food_hot_ranking")
+    List<String> getHotDish();
 }

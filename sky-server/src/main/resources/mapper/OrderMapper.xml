@@ -12,6 +12,21 @@
                 #{remark}, #{phone}, #{address}, #{userName}, #{consignee}, #{cancelReason}, #{rejectionReason}, #{cancelTime},
                 #{estimatedDeliveryTime}, #{deliveryStatus}, #{deliveryTime}, #{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
+    <insert id="insertWeeklyTop5">
+        INSERT INTO food_hot_ranking (food_id, food_name)
+        SELECT
+            od.dish_id AS food_id,
+            d.name    AS food_name
+        FROM order_detail od
+                 JOIN orders o ON od.order_id = o.id
+                 JOIN dish   d ON od.dish_id = d.id
+        WHERE o.pay_status = 1
+          AND o.order_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          AND od.dish_id IS NOT NULL
+        GROUP BY od.dish_id, d.name
+        ORDER BY SUM(od.number) DESC
+            LIMIT 5
+    </insert>
 
     <update id="update" parameterType="com.sky.entity.Orders">
         update orders
@@ -43,6 +58,10 @@
         </set>
         where id = #{id}
     </update>
+    <update id="truncate">
+        TRUNCATE TABLE food_hot_ranking
+    </update>
+
     <select id="page" resultType="com.sky.entity.Orders">
         select * from orders
         <where>
@@ -71,28 +90,28 @@
     <select id="getTurnover" resultType="java.lang.Double">
         select sum(amount) from orders
         <where>
-            <if test="begin !=null">
+            <if test="begin != null">
                 and order_time &gt; #{begin}
             </if>
             <if test="end != null">
                 and order_time &lt; #{end}
             </if>
             <if test="status != null">
-                and status =#{status}
+                and status = #{status}
             </if>
         </where>
     </select>
     <select id="countByMap" resultType="java.lang.Integer">
         select count(id) from orders
         <where>
-            <if test="begin !=null">
+            <if test="begin != null">
                 and order_time &gt; #{begin}
             </if>
             <if test="end != null">
                 and order_time &lt; #{end}
             </if>
             <if test="status != null">
-                and status =#{status}
+                and status = #{status}
             </if>
         </where>
     </select>

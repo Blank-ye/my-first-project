@@ -19,3 +19,5 @@ sky:
   wechat:
     appid: REPLACE_WECHAT_APPID
     secret: REPLACE_WECHAT_SECRET
+  open-ai:
+    api-key: REPLACE_OPENAI_API_KEY
