@@ -86,4 +86,7 @@ public interface OrderMapper {
 
     @Select("select food_name from food_hot_ranking")
     List<String> getHotDish();
+
+    @Select("SELECT id FROM orders WHERE number = #{number} ")
+    Long getOrderId(String number);
 }

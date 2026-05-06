@@ -20,6 +20,8 @@ import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import com.sky.websocket.WebSocketServer;
+import dev.langchain4j.agent.tool.P;
+import dev.langchain4j.agent.tool.Tool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
     *
     * */
     @Override
-    public OrderVO getById(Long id) {
+    public OrderVO getById(@P("订单id")Long id) {
         //根据订单id查询订单是否存在
         Orders orders= orderMapper.getById(id);
         //判断订单如果存在,不村在就抛异常
@@ -208,6 +210,10 @@ public class OrderServiceImpl implements OrderService {
           throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
         //根据订单id查询订单详细
+        Long userId= BaseContext.getCurrentId();
+        if(!orders.getUserId().equals(userId)){
+            throw new OrderBusinessException("无权访问该订单");
+        }
         List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(id);
 
         OrderVO orderVO = new OrderVO();
