@@ -76,11 +76,11 @@ public class CustomerServiceTools {
         return orderId;
     }
 
-    @Tool("根据订单id查询用户订单，提示用户订单的实时状态")
-    public String getOrderById(@P("订单id") Long id) {
+    @Tool("根据订单id查询用户订单，提示用户订单的实时状态,userId从系统提示次里获取")
+    public String getOrderById(@P("订单id") Long id, @P("当前用户ID") String userId) {
         OrderVO orderVO;
         try {
-            orderVO = orderService.getById(id);
+            orderVO = orderService.getByIdByAi(id,userId);
         } catch (Exception e) {
             return "未查询到该订单，请检查订单号是否正确";
         }

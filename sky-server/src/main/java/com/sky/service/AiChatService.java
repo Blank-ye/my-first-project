@@ -15,7 +15,7 @@ import reactor.core.publisher.Flux;
         streamingChatModel = "openAiStreamingChatModel",
         chatMemoryProvider = "getMyChatMemoryProvider",
         tools = {"customerServiceTools"},
-        contentRetriever = "embeddingStoreContentRetriever"
+        contentRetriever = "hybridContentRetriever"
 )
 public interface AiChatService {
     @SystemMessage(fromResource = "AiRag/system-prompt.txt")

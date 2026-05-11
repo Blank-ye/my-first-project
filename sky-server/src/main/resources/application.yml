@@ -67,6 +67,7 @@ langchain4j:
       timeout: 60s
       log-requests: true
       log-responses: true
+      extra-body: '{"thinking":{"type":"disabled"}}'
     streaming-chat-model:
       base-url: https://open.bigmodel.cn/api/paas/v4/
       api-key: ${sky.open-ai.api-key}
@@ -74,7 +75,12 @@ langchain4j:
       temperature: 0.7
       max-tokens: 4000
       timeout: 60s
+      extra-body: '{"thinking":{"type":"disabled"}}'
     embedding-model:
       base-url: https://open.bigmodel.cn/api/paas/v4/
       api-key: ${sky.open-ai.api-key}
       model-name: embedding-3
+      log-requests: true
+      log-responses: true
+
+

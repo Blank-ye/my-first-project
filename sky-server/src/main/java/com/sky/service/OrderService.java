@@ -98,4 +98,10 @@ public interface OrderService {
     *
     * */
     void reminder(Long id);
+
+    /*
+    * Ai查询订单
+    *
+    * */
+    OrderVO getByIdByAi(Long id,String userId);
 }

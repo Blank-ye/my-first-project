@@ -202,17 +202,12 @@ public class OrderServiceImpl implements OrderService {
     *
     * */
     @Override
-    public OrderVO getById(@P("订单id")Long id) {
+    public OrderVO getById(Long id) {
         //根据订单id查询订单是否存在
         Orders orders= orderMapper.getById(id);
         //判断订单如果存在,不村在就抛异常
         if(orders == null){
           throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
-        }
-        //根据订单id查询订单详细
-        Long userId= BaseContext.getCurrentId();
-        if(!orders.getUserId().equals(userId)){
-            throw new OrderBusinessException("无权访问该订单");
         }
         List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(id);
 
@@ -223,6 +218,27 @@ public class OrderServiceImpl implements OrderService {
         return orderVO;
     }
 
+    @Override
+    public OrderVO getByIdByAi(Long id ,String useId) {
+        //根据订单id查询订单是否存在
+        Orders orders= orderMapper.getById(id);
+        //判断订单如果存在,不村在就抛异常
+        if(orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        String user=orders.getUserId().toString();
+        if(!user.equals(useId)){
+            throw new OrderBusinessException("无权访问该订单");
+        }
+
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(id);
+
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderDetailList(orderDetails);
+        BeanUtils.copyProperties(orders,orderVO);
+
+        return orderVO;
+    }
     /*
     * 再来一单
     *

@@ -4,3 +4,9 @@
 *.class
 *Test.java
 **/test/
+/sky-ai-service/**
+*.md
+.claude
+.claudeignore
+.trae
+

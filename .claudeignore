@@ -1,0 +1,2 @@
+# 忽略 sky-ai-service 目录，避免重复扫描
+sky-ai-service/**

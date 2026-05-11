@@ -2,6 +2,7 @@ package com.sky.websocket;
 
 import com.sky.ToolAi.InputSanitizer;
 import com.sky.ToolAi.RateLimiter;
+import com.sky.listener.AiChatLogListener;
 import com.sky.service.AiChatService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -83,31 +84,40 @@ public class ChatWebSocket {
             old.dispose();
         }
 
-        // 4. 调用 AI
-        Disposable disposable = aiChatService.chat(sanitized, userId, userId)
-                .subscribe(
-                        token -> {
-                            try {
-                                session.getBasicRemote().sendText(token);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+
+        // 设置 userId 到 ThreadLocal，供 AiChatLogListener 使用
+        AiChatLogListener.setUserId(Long.parseLong(userId));
+        Disposable disposable;
+        try {
+            disposable = aiChatService.chat(sanitized, userId, userId)
+                    .doFinally(signal -> AiChatLogListener.clearUserId())
+                    .subscribe(
+                            token -> {
+                                try {
+                                    session.getBasicRemote().sendText(token);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            },
+                            error -> {
+                                try {
+                                    session.getBasicRemote().sendText("[ERROR]" + error.getMessage());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            },
+                            () -> {
+                                try {
+                                    session.getBasicRemote().sendText("[DONE]");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        },
-                        error -> {
-                            try {
-                                session.getBasicRemote().sendText("[ERROR]" + error.getMessage());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        },
-                        () -> {
-                            try {
-                                session.getBasicRemote().sendText("[DONE]");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
+                    );
+        } catch (Exception e) {
+            AiChatLogListener.clearUserId();
+            throw e;
+        }
 
         SUBSCRIPTIONS.put(userId, disposable);
     }
