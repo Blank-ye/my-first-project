@@ -1,6 +1,6 @@
-# Sky Take Out
+# 智享AI助手
 
-苍穹外卖系统 - 基于Spring Boot的外卖点餐平台
+基于Spring Boot的外卖点餐平台，集成RAG智能客服
 
 ## 技术栈
 
@@ -15,10 +15,10 @@
 ## 项目结构
 
 ```
-sky-take-out/
-├── sky-common/          # 公共模块（工具类、常量、异常处理）
-├── sky-pojo/            # 实体类模块（DTO、VO、Entity）
-├── sky-server/          # 主服务模块（Controller、Service、Mapper）
+zhixiang-ai-assistant/
+├── scommon/             # 公共模块（工具类、常量、异常处理）
+├── pojo/                # 实体类模块（DTO、VO、Entity）
+├── server/              # 主服务模块（Controller、Service、Mapper）
 └── pom.xml              # Maven父工程配置
 ```
 
@@ -57,7 +57,7 @@ sky-take-out/
 1. **克隆项目**
 ```bash
 git clone https://github.com/Blank-ye/my-first-project.git
-cd sky-take-out
+cd zhixiang-ai-assistant
 ```
 
 2. **创建数据库**
@@ -66,7 +66,7 @@ CREATE DATABASE sky_take_out DEFAULT CHARACTER SET utf8mb4;
 ```
 
 3. **修改配置文件**
-编辑 `sky-server/src/main/resources/application-dev.yml`，配置：
+编辑 `server/src/main/resources/application-dev.yml`，配置：
 - 数据库连接信息
 - Redis连接信息
 - 阿里云OSS密钥
@@ -75,7 +75,7 @@ CREATE DATABASE sky_take_out DEFAULT CHARACTER SET utf8mb4;
 4. **编译运行**
 ```bash
 mvn clean package
-java -jar sky-server/target/sky-server-1.0-SNAPSHOT.jar
+java -jar server/target/server-1.0-SNAPSHOT.jar
 ```
 
 ## API文档
@@ -84,8 +84,8 @@ java -jar sky-server/target/sky-server-1.0-SNAPSHOT.jar
 
 ## 开发说明
 
-- 启动类：`sky-server/src/main/java/com/sky/SkyApplication.java`
-- 配置文件：`sky-server/src/main/resources/application.yml`
+- 启动类：`server/src/main/java/com/sky/SkyApplication.java`
+- 配置文件：`server/src/main/resources/application.yml`
 - 接口文档：使用Knife4j自动生成
 
 ## 许可证
