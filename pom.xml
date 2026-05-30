@@ -17,7 +17,7 @@
         <module>sky-common</module>
         <module>sky-pojo</module>
         <module>sky-server</module>
-        <module>sky-ai-service</module>
+
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
