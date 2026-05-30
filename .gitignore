@@ -1,13 +1,47 @@
+# 编译输出
 **/target/
-.idea
-*.iml
 *.class
+*.jar
+*.war
+*.ear
+
+# IDE配置
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+.vscode/
+*.swp
+*.swo
+*~
+
+# 测试文件
 *Test.java
 **/test/
-/sky-ai-service/**
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 环境和密钥
+*.env
+*.env.*
+
+# 日志
+*.log
+
+# 个人学习资料
 *.md
-.claude
-.claudeignore
-.trae
 /八股/**
 /面试/**
+
+# Claude Code配置
+.claude/
+.claudeignore
+
+# 其他IDE
+.trae/
+
+# AI服务模块（不上传）
+/sky-ai-service/**
